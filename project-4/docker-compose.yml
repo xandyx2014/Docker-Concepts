@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    container_name: nginx1
+    volumes:
+      - 'E:\proyects_docker\tutorial\project-4:/usr/share/nginx/html'
+    ports:
+      - "8080:80"
+    image: nginx
+  

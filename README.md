@@ -79,8 +79,25 @@ cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo l
 > docker cp [nameCOntainer]:/var/log/miarchivodocker.txt .
 ## Docker contendor que se autodestruye
 > docker run --rm --ti --name centos centos
+## Mostrar netwokr de docker
+> docker network
+## Inspeccionar una network
+> docker network inspect [name network]
+## Conectar contenedores en la misma red
+> docker run -d --network docker-test-my-network --name cont1 -ti centos
+> docker run -d --network docker-test-my-network --name cont2 -ti centos
+## Conectar contenedores en distintas redes
+> docker network connect  docker-test-network containerName
+## Como desconectar los contenedores de distintas redes
+> docker network disconnect  docker-test-network containerName
+## Eliminar una red
+> docker network rm myNetworkcustom
+## Asignar una IP a un contenedor
+> docker network create --subnet 172.128.10.0/4 --gatewarey 172.128.10.1 -d bridge my-testnetw
 
-
+> docker run --network my-net -d --name nginxl --ip 172.10.50 -ti gninxl
+## LA red de Host
+> docker run --network host -d --name tst2 --ti centos
 # Volumenes
 - Los volumenes permiten almacenar data persistente del contendor
 Existen 3 tipo de volumenes
@@ -99,3 +116,162 @@ Para mantener la persistencia de los datos que sean importnates en nuestro equip
 ## Volumenes Nombrados
 - se nombre en los docekr files con VOLUME
 - utiliza la misma logica q los VOLUME anonimos
+
+# Docker Compose
+- Es una herramientas q nos ayuda a crear aplicaciones multicontendor
+- Podemos Definiar
+    - Contenedores
+    - Imangesn
+    - Volumunenes
+    - Redes
+    - ...
+## Las propiedaes son
+- version: 
+- services:
+- volumnes:
+- networks:
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+    ports:
+      - "8080:80"
+    image: nginx
+```
+## Para levantar el servicio de docker-compose.yml
+> docker-compose up -d
+## Para deeter el servicio docker-compose
+> docker down
+## Variales de entorno
+```yml
+version: '3'
+services:
+    db:
+        image: mysql:5.7
+        container_name: mysql
+        ports:
+            - "3306:3306"
+        enviroment:
+            - "MYSQL_ROOT_PASSWORD=1234566"
+```
+Tambien podemos definirlo enun archivo llamano common.env
+```yml
+version: '3'
+services:
+    db:
+        image: mysql:5.7
+        container_name: mysql
+        ports:
+            - "3306:3306"
+        env_file: common.env
+```
+## Volumenes en docker compose
+### Volumenees nombrados
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+    ports:
+      - "8080:80"
+    volumens:
+      - "vol2:/usr/share/ngix/html"
+    image: nginx
+volumen:
+    vol2:
+```
+### Volumenees host
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+    ports:
+      - '8080:80'
+    volumes:
+      - 'E:\proyects_docker\tutorial\project-4:/usr/share/nginx/html'
+    image: nginx
+```
+## Redes en docker compose
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+    ports:
+      - "8080:80"
+    image: nginx
+		networks:
+			- net-test
+	web:
+    container_name: nginx2
+    ports:
+      - "8080:81"
+    image: nginx
+		networks:
+			- net-test
+networks:
+	net-test:
+```
+## Construye imagenes con docker-compose.yml
+> docker-compose build
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+		build:
+			context: .
+    ports:
+      - '8080:80'
+    volumes:
+      - 'E:\proyects_docker\tutorial\project-4:/usr/share/nginx/html'
+    image: nginx
+```
+## Sobreescribiar el CMD de un contenedor con COmpose
+```yml
+version: '3'
+services:
+  web:
+    container_name: nginx1
+		command: python -m SimpleHttpServer 8080
+		build:
+			context: .
+    ports:
+      - '8080:80'
+    volumes:
+      - 'E:\proyects_docker\tutorial\project-4:/usr/share/nginx/html'
+    image: nginx
+```
+## Limitar recursos de la memoria
+```yml
+version: "3.9"
+services:
+  redis:
+    image: redis:alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+```
+## Politico de renicio de contendores
+
+Flag	Description
+- **no**	Do not automatically restart the container. (the default)
+- **on-failure**	Restart the container if it exits due to an error, which manifests as a non-zero exit code.
+- **always**	Always restart the container if it stops. If it is manually stopped, it is restarted only when Docker daemon restarts or the container itself is manually restarted. (See the second bullet listed in restart policy details)
+- **unless-stopped**	Similar to always, except that when the container is stopped (manually or otherwise), it is not restarted even after Docker daemon restarts.
+```yml
+version: '3'
+services:
+	test:
+		container_name: test
+		image: restar-image
+		build: .
+		restart: unless-stopped
+```
