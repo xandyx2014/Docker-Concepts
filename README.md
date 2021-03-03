@@ -275,3 +275,42 @@ services:
 		build: .
 		restart: unless-stopped
 ```
+
+## example wordpress mysql
+```yml
+version: '3'
+
+services:
+	db:
+		container_name: wp-mysql
+		image: mysql:5.7
+		volumens:
+			- $PWD/data:/var/lib/mysql
+		enviroment:
+			MYSQL_ROOT_PASSWORD: 123456789
+			MYSQL_DATABASE: wordpress
+			MYSQL_USER: wordpress
+			MYSQL_PASSWORD: wordpress
+		ports:
+			-	"3306:3306"
+		networks:
+			-	my_net
+
+	wp:
+		container_name: wp-web
+		volumens:
+			-	"$PWD/html:/var/www/html"
+		dependes_on:
+			-	db
+		image: wordpress:lastes
+		porst:
+			-	"80:80"
+		enviroment:
+			WORDPRESS_DB_HOST: db:3306
+			WORDPRESS_DB_USER: wordpress
+			WORDPRESS_DB_PASSWORD: wordpress
+		networks:
+			-	my_net
+network:
+	my_net:
+```
