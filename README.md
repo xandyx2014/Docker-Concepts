@@ -314,3 +314,5 @@ services:
 network:
 	my_net:
 ```
+## Buenas practicas
+### ¿ Porque y para que los dotfiles?
