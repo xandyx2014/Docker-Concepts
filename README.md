@@ -4,7 +4,7 @@
 // Descargar ubuntu
 > docker pull ubuntu
 
-## Docker images
+# Docker images
 - Es un template para crear un entorno
 - Este contiene todos los elementos necesitado para tu app librerias evn, config, iles softwate
 - Este puede tener una version o snapshots basado en un tiempo
@@ -13,7 +13,52 @@
 - Es la imagenes se puede decir q son como instaladores que crean disintios procesos llamados contendores
 - Cada imagen se le puede pasar parametros depende de su creador
 - Existen imagenes oficiales
-## Docker Container
+- Se puede crear imagenes personalizadas
+
+## Instalar una imagen pull
+
+`docker pull mongo`
+
+## instalar una imagen con una tag especifica
+
+`docker pull mongo:3.6.5-jessie`
+
+## Ejecutar una imagen con parametros
+
+- `-d` sirve para ejecutar la imagen en sugndo plano
+
+`docker run -d -p 80:80 apache`
+
+# Dockerfile
+## Construir una imagen desde un DockerFile
+
+`docker build -t apache .`
+
+## Example de docker file
+```Dockerfile
+# FROM: la imagen que va a tomar
+FROM centos
+# RUN: ejectua comandos antes que la imagen se monte
+# WORKDIR: Significa donde estas trabajando actualemnte, te mueve de directorio
+# COPY beryllium html
+WORKDIR /var/wwww
+RUN yum install httpd -y
+# COPY : Copia un  archivo de tu maquina local a la iamgen
+# COPY tuRuta RutaDestinoDImagen
+# Add: Sirve para  Url donde puedes colocar tu url y este la agregara descargando el archivo
+COPY beryllium /var/www/html
+# CMD: es el comando que mantiene a la imagen corriendo
+# ENV: son variables que puedes pasarle al docker file
+# EXPOSE: expone el puerto
+EXPOSE 8080
+ENV contenido valorContenido
+CMD apache
+```
+## Eliminar una imagen con su volumenes incluidos
+
+`docker rm -fv thirsth_goodall`
+
+# Docker Container
 - It es una instancia de una imagen
 - Tu puedes buscar una docker hub container repostire
 
@@ -81,7 +126,9 @@ cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo l
 `docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
 
 ## Listar volume
-> docker volume ls
+
+`docker volume ls`
+
 ## Ingresar modo rrot
 > docker exec -ti -u root drupal bash
 ## Ver stats de un contendor
