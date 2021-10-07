@@ -5,12 +5,14 @@
 > docker pull ubuntu
 
 ## Docker images
-- Es un templatae para crear un entorno
+- Es un template para crear un entorno
 - Este contiene todos los elementos necesitado para tu app librerias evn, config, iles softwate
 - Este puede tener una version o snapshots basado en un tiempo
 - ESte es inmutable, pero este puede ser clonado o compartido
 - Esas imagees son creados usando Dockerfile
 - Es la imagenes se puede decir q son como instaladores que crean disintios procesos llamados contendores
+- Cada imagen se le puede pasar parametros depende de su creador
+- Existen imagenes oficiales
 ## Docker Container
 - It es una instancia de una imagen
 - Tu puedes buscar una docker hub container repostire
@@ -21,25 +23,38 @@ WORKDIR /usr/share/nginx/html
 COPY . .
 ```
 
-> docker build -t [usernameFromDockerHub]/[nameImage]:[tag] [directory]
-// para ejecutar un comando en el contenedor ya se en ejecusion
-> docker exec -it [idContenedior] bash
-> docker exect -u root -it bash
+`docker build -t [usernameFromDockerHub]/[nameImage]:[tag] [directory]`
+
+para ejecutar un comando desde la imagen en el contenedor ya se en ejecusion
+
+`docker exec -it [idContenedior] bash`
+`docker exect -u root -it bash`
+
 Esto genera una imagen
-> docker-compose build
+
+`docker-compose build`
+
 Este levanta los servicios
->docker-compose up
+
+`docker-compose up`
+
 Linkear los docker que depende de unos
-- Docker crea un tunerl seguro entre lso contenedores que no requieren exponer ninugn puerto externamente del conenedor
-> docker run -d -p 5000:5000 --link [nombre del contenedor] dockerapp:0.1
+Docker crea un tunerl seguro entre lso contenedores que no requieren exponer ninugn puerto externamente del contenedor
+
+`docker run -d -p 5000:5000 --link [nombre del contenedor] dockerapp:0.1`
+
 Para ver los logs
 ¿ Como funciona los enlances entre los contenedores?
-> docker exec -it [iddocker] bash
-> more /etc/hosts
+`
+docker exec -it [iddocker] bash
+more /etc/hosts
+`
 ## Comando utiles de docker-compose
-> docker-compose up -d
-> docker-compose ps
-> docker-compose logs [name-container]
+```bash
+docker-compose up -d
+docker-compose ps
+docker-compose logs [name-container]
+```
 
 # Buenas practicas
 - Efimeros 
@@ -62,7 +77,9 @@ cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo l
 - Podemos crear varios partiendo de una misma imagen
 # Listar puertos
 - docker run -d -p [Puesto nuestra maquina]:[Puerto del contenedor] jenkins
-> docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql
+
+`docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
+
 ## Listar volume
 > docker volume ls
 ## Ingresar modo rrot
