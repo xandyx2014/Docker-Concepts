@@ -138,14 +138,19 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 
 `docker images -f dangling=true`
 
-# Docker multi stage build
+## Docker multi stage build
 
 # Contenedores
 - Son una instancia de ejecuacion de una imagen
 - Son temporales
-- Capa de rw
+- Capa de rw 
 - Podemos crear varios partiendo de una misma imagen
-# Listar puertos
+## Renombar el contenedor
+
+`docker rename oldName newName`
+
+## Listar y mapear los puertos puertos
+
 - docker run -d -p [Puesto nuestra maquina]:[Puerto del contenedor] jenkins
 
 `docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
@@ -154,9 +159,26 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 
 `docker volume ls`
 
+`docker ps -a`
+
+## Inicar / Reniciar / Dentener Contendor
+
+```
+docker stop [id | Nombre ]
+docker start [id | Nombre ]
+docker restart [id | Nombre ]
+```
+
 ## Ingresar modo rrot
+`-ti` significa interactivo
 
 `docker exec -ti -u root drupal bash`
+
+## Variables de entorno
+
+Son las variables que se pasan al iniciar un contenedor del docker File
+
+`docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
 
 ## Ver stats de un contendor
 
@@ -170,15 +192,17 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 
 `docker run -d --cpuset-cpus 0-1 --name myNameContainer nameImage`
 
-## Para copiar archivos  desde afuera al docker
+## Para copiar archivos  desde afuera hacia el docker
 
 `docker cp index.html [nameCOntainer]:/tmp`
 
 ## Para copiar archivos desde el docker hacia la computadora 
 
-`docker cp [nameCOntainer]:/var/log/miarchivodocker.txt .`
+`docker cp [nameContainer]:/var/log/miarchivodocker.txt .`
 
 ## Docker contendor que se autodestruye
+
+`--rm delete the container`
 
 `docker run --rm --ti --name centos centos`
 
@@ -226,6 +250,10 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 
 `docker rmi centos:prueba1`
 
+## Sobreescribir el CMD de una imagen sin un DockerFile
+
+`docker un -d -p 8080:8080 centos python -m SimpleHTTPServer 8080`
+
 # Volumenes
 - Los volumenes permiten almacenar data persistente del contendor
 Existen 3 tipo de volumenes
@@ -234,9 +262,9 @@ Existen 3 tipo de volumenes
 - Named Volumens volumenes adminsitrados por docker
 ## Porq es importante los volumenes?
 Para mantener la persistencia de los datos que sean importnates en nuestro equipoo
-> docker run --name some-mysql -v /miDirectorioLocal/:/directorioContenedor -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+`docker run --name some-mysql -v /miDirectorioLocal/:/directorioContenedor -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
 
-> docker run --name some-mysql -v /miDirectorio/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+`docker run --name some-mysql -v /miDirectorio/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
 ## DOcker anonimos 
 - tienen nombres aletorias hash
 - se crea en un arhivo alteroia del lugar
