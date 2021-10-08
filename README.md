@@ -14,6 +14,13 @@
 - Cada imagen se le puede pasar parametros depende de su creador
 - Existen imagenes oficiales
 - Se puede crear imagenes personalizadas
+## Listar contener
+
+`docker ps`
+
+## Ver los LOGS de un Contendor
+
+`docker logs -f myNameContainer`
 
 ## Instalar una imagen pull
 
@@ -34,14 +41,22 @@
 
 `docker build -t apache .`
 
+## .dockerignore
+sirve para ignorar carpetas 
+
 ## Example de docker file
+
 ```Dockerfile
 # FROM: la imagen que va a tomar
 FROM centos
+# LABEl: es para agregar metadescripcion a  tu imagen
+LABEL version=1.0
+LABEL description=This is an image
 # RUN: ejectua comandos antes que la imagen se monte
 # WORKDIR: Significa donde estas trabajando actualemnte, te mueve de directorio
 # COPY beryllium html
 WORKDIR /var/wwww
+# RUN: sirve para ejecutar comandos
 RUN yum install httpd -y
 # COPY : Copia un  archivo de tu maquina local a la iamgen
 # COPY tuRuta RutaDestinoDImagen
@@ -52,6 +67,11 @@ COPY beryllium /var/www/html
 # EXPOSE: expone el puerto
 EXPOSE 8080
 ENV contenido valorContenido
+# Sirve para mantener la persistencia de datos con el ordenador
+VOLUME /var/www/html
+# USER: es para decir que usuario realiza la tarea por defecto es root
+USER root
+# CMD: es para ejecutar una tarea que se mantendra a la escucha y esta mantendra ejecutando a la imagen
 CMD apache
 ```
 ## Eliminar una imagen con su volumenes incluidos
@@ -101,7 +121,7 @@ docker-compose ps
 docker-compose logs [name-container]
 ```
 
-# Buenas practicas
+# Buenas practicas para el docker file
 - Efimeros 
 - Multi linea
 - no instalar paquetes innecesarios
@@ -110,9 +130,14 @@ docker-compose logs [name-container]
 # RUN vs CMD
 No confunda RUN con CMD. RUN en realidad ejecuta un comando y confirma el resultado; CMD no ejecuta nada en el momento de la compilación de la imagen, pero especifica el comando previsto para la imagen.
 
-# Dangling images
+## Dangling images
 - <none> <none>
 cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo lectura y lo que hace docker es crear una imagen y la otra imagen le coloca <none> donde el nombre y el tag son iguales 
+Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifica una tag
+## Listar las images danling
+
+`docker images -f dangling=true`
+
 # Docker multi stage build
 
 # Contenedores
@@ -130,38 +155,77 @@ cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo l
 `docker volume ls`
 
 ## Ingresar modo rrot
-> docker exec -ti -u root drupal bash
-## Ver stats de un contendor
-> docker stats [nameContainer | idContainer ]
-## Limitar recursos conteneodr puede consumir
-> docker run -d -m "500mb | 5gb" --name myNameContainer nameImage
-## Limitar cpu
-> docker run -d --cpuset-cpus 0-1 --name myNameContainer nameImage
-## Para copiar archivos  desde afuera al docker
-> docker cp index.html [nameCOntainer]:/tmp
-## Para copiar archivos desde el docker hacia la computadora 
-> docker cp [nameCOntainer]:/var/log/miarchivodocker.txt .
-## Docker contendor que se autodestruye
-> docker run --rm --ti --name centos centos
-## Mostrar netwokr de docker
-> docker network
-## Inspeccionar una network
-> docker network inspect [name network]
-## Conectar contenedores en la misma red
-> docker run -d --network docker-test-my-network --name cont1 -ti centos
-> docker run -d --network docker-test-my-network --name cont2 -ti centos
-## Conectar contenedores en distintas redes
-> docker network connect  docker-test-network containerName
-## Como desconectar los contenedores de distintas redes
-> docker network disconnect  docker-test-network containerName
-## Eliminar una red
-> docker network rm myNetworkcustom
-## Asignar una IP a un contenedor
-> docker network create --subnet 172.128.10.0/4 --gatewarey 172.128.10.1 -d bridge my-testnetw
 
-> docker run --network my-net -d --name nginxl --ip 172.10.50 -ti gninxl
+`docker exec -ti -u root drupal bash`
+
+## Ver stats de un contendor
+
+`docker stats [nameContainer | idContainer ]`
+
+## Limitar recursos conteneodr puede consumir
+
+`docker run -d -m "500mb | 5gb" --name myNameContainer nameImage`
+
+## Limitar cpu
+
+`docker run -d --cpuset-cpus 0-1 --name myNameContainer nameImage`
+
+## Para copiar archivos  desde afuera al docker
+
+`docker cp index.html [nameCOntainer]:/tmp`
+
+## Para copiar archivos desde el docker hacia la computadora 
+
+`docker cp [nameCOntainer]:/var/log/miarchivodocker.txt .`
+
+## Docker contendor que se autodestruye
+
+`docker run --rm --ti --name centos centos`
+
+## Mostrar netwokr de docker
+
+`docker network`
+
+## Inspeccionar una network
+
+`docker network inspect [name network]`
+
+## Conectar contenedores en la misma red
+
+`docker run -d --network docker-test-my-network --name cont1 -ti centos`
+`docker run -d --network docker-test-my-network --name cont2 -ti centos`
+
+## Conectar contenedores en distintas redes
+
+`docker network connect  docker-test-network containerName`
+
+## Como desconectar los contenedores de distintas redes
+
+`docker network disconnect  docker-test-network containerName`
+
+## Eliminar una red
+
+`docker network rm myNetworkcustom`
+
+## Asignar una IP a un contenedor
+
+`docker network create --subnet 172.128.10.0/4 --gatewarey 172.128.10.1 -d bridge my-testnetw`
+
+
+`docker run --network my-net -d --name nginxl --ip 172.10.50 -ti gninxl`
+
 ## LA red de Host
-> docker run --network host -d --name tst2 --ti centos
+
+`docker run --network host -d --name tst2 --ti centos`
+
+## Ver imagenes
+
+`docker images | grep centos`
+
+## Eliminar Imagenes
+
+`docker rmi centos:prueba1`
+
 # Volumenes
 - Los volumenes permiten almacenar data persistente del contendor
 Existen 3 tipo de volumenes
@@ -204,9 +268,9 @@ services:
     image: nginx
 ```
 ## Para levantar el servicio de docker-compose.yml
-> docker-compose up -d
+`docker-compose up -d`
 ## Para deeter el servicio docker-compose
-> docker down
+`docker down`
 ## Variales de entorno
 ```yml
 version: '3'
@@ -279,7 +343,9 @@ networks:
 	net-test:
 ```
 ## Construye imagenes con docker-compose.yml
-> docker-compose build
+
+`docker-compose build`
+
 ```yml
 version: '3'
 services:
