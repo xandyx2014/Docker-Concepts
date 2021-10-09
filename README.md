@@ -323,8 +323,14 @@ docker exec -ti myNameContainer bash
 
 ## Dangling Volumen
 `docker v`
+## Comparte Volumenes entre uno o mas contendores
+## Docker Compose
+Es una herramientas que nos ayuda a crear herramientars multicontendores, donde podemos definir toda la configuraciones necesarias de estas
+## Generar Container desde DockerCompose
 
-## Las propiedaes son
+`docker-compose up -d`
+
+## Las propiedaes del DockerCompose
 - version: 
 - services:
 - volumnes:
@@ -354,7 +360,12 @@ services:
         enviroment:
             - "MYSQL_ROOT_PASSWORD=1234566"
 ```
-Tambien podemos definirlo enun archivo llamano common.env
+Tambien podemos definirlo enun archivo Llamandolo como  
+`common.env`
+```
+MYSQL_ROOT_PASSWORD=12345678
+hola=hola12
+```
 ```yml
 version: '3'
 services:
