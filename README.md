@@ -255,25 +255,40 @@ Son las variables que se pasan al iniciar un contenedor del docker File
 `docker un -d -p 8080:8080 centos python -m SimpleHTTPServer 8080`
 
 # Volumenes
+- Sirve para mantener data Persistente en nuestra maquina local.
 - Los volumenes permiten almacenar data persistente del contendor
 Existen 3 tipo de volumenes
 - Host archivo especificados en nuestra maquinba
 - Anonymus volumenes especificado aletoriamente por docker
 - Named Volumens volumenes adminsitrados por docker
+
+## Eliminar una imagen con su volumenes incluidos
+
+`docker rm -fv thirsth_goodall`
+
 ## Porq es importante los volumenes?
-Para mantener la persistencia de los datos que sean importnates en nuestro equipoo
+Para mantener la persistencia de los datos que sean importnates en nuestro equipoo 
+
 `docker run --name some-mysql -v /miDirectorioLocal/:/directorioContenedor -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
 
 `docker run --name some-mysql -v /miDirectorio/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
-## DOcker anonimos 
+## Volumenes de HOST
+
+`docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=123456789" -v mydirectory/directory/:/var/lib/mysql/ `
+
+## Volumnenes anonimos 
 - tienen nombres aletorias hash
-- se crea en un arhivo alteroia del lugar
+- se crea en un archivo  aletorio del lugar
 - cuando se elimina el Container se borra el volumen anonimo
+
+
 ## Volumenes Nombrados
-- se nombre en los docekr files con VOLUME
+- se nombre en los Docker files con VOLUME
 - utiliza la misma logica q los VOLUME anonimos
 
-# Docker Compose
+
+
+## Docker Compose
 - Es una herramientas q nos ayuda a crear aplicaciones multicontendor
 - Podemos Definiar
     - Contenedores
@@ -281,6 +296,34 @@ Para mantener la persistencia de los datos que sean importnates en nuestro equip
     - Volumunenes
     - Redes
     - ...
+## Example VOLUMENES nombrados
+
+```
+docker volume create my-vol
+docker volume ls
+docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=123456789" -v my-vol:/var/lib/mysql/
+```
+NOTA: al eliminar el contenedor no se elimina el volumen al ser este creado
+
+`docker rm -fv mysql`
+
+## Example persistiendo Data en MongoDB
+
+```
+docker run -d -p 27017:27017 -v mydirectory/directory:?data/db -d mongo
+docker exec -ti myNameContainer bash
+```
+## Listar Volumenes creados
+
+`docker volume ls -f dangling=true`
+
+`docker volume ls -f dangling=true -q`
+
+`docker volume rm idVolumen`
+
+## Dangling Volumen
+`docker v`
+
 ## Las propiedaes son
 - version: 
 - services:
