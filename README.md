@@ -1,24 +1,34 @@
-> docker build -t andyjesus2/debian .\proyect_one\
-// EJECTURAR Y INTERACTUAR docker
-> docker run -it 6f6545164e69
-// Descargar ubuntu
-> docker pull ubuntu
+# Hola mundo
+
+```bash
+docker build -t andyjesus2/debian .\project_one\
+# Ejecutar  Y INTERACTUAR docker
+docker run -it 6f6545164e69
+# Descargar ubuntu
+docker pull ubuntu
+```
 
 # Docker images
 - Es un template para crear un entorno
-- Este contiene todos los elementos necesitado para tu app librerias evn, config, iles softwate
+- Este contiene todos los elementos necesitado para tu app librerías evn, config, Files software
 - Este puede tener una version o snapshots basado en un tiempo
-- ESte es inmutable, pero este puede ser clonado o compartido
-- Esas imagees son creados usando Dockerfile
-- Es la imagenes se puede decir q son como instaladores que crean disintios procesos llamados contendores
-- Cada imagen se le puede pasar parametros depende de su creador
-- Existen imagenes oficiales
-- Se puede crear imagenes personalizadas
+- Este es inmutable, pero este puede ser clonado o compartido
+- Esas imágenes son creados usando Dockerfile
+- Es la imágenes se puede decir q son como instaladores que crean Distintos procesos llamados Contenedores
+- Cada imagen se le puede pasar parámetros depende de su creador
+- Existen imágenes oficiales
+- Se puede crear imágenes personalizadas
+# Contenedores vs VMS
+- un contenedor es una instancia de la imagen
+- el contenedor es solo un proceso del sistema
+- la maquina virtual es todo un set completo del Sistema operativo
+
+# IMAGES
 ## Listar contener
 
 `docker ps`
 
-## Ver los LOGS de un Contendor
+## Ver los LOGS de un Contenedor
 
 `docker logs -f myNameContainer`
 
@@ -30,21 +40,23 @@
 
 `docker pull mongo:3.6.5-jessie`
 
-## Ejecutar una imagen con parametros
+## Ejecutar una imagen con parámetros
 
-- `-d` sirve para ejecutar la imagen en sugndo plano
+`-d` sirve para ejecutar la imagen en segundo plano
 
 `docker run -d -p 80:80 apache`
 
-# Dockerfile
+# Images crear con DockerFile
+
 ## Construir una imagen desde un DockerFile
 
+Sirve para crear una imagen tomando de base un DockerFile
+`docker build -t [NameImage] .`
 `docker build -t apache .`
-
 ## .dockerignore
 sirve para ignorar carpetas 
 
-## Example de docker file
+# Example DockerFile
 
 ```Dockerfile
 # FROM: la imagen que va a tomar
@@ -52,13 +64,13 @@ FROM centos
 # LABEl: es para agregar metadescripcion a  tu imagen
 LABEL version=1.0
 LABEL description=This is an image
-# RUN: ejectua comandos antes que la imagen se monte
-# WORKDIR: Significa donde estas trabajando actualemnte, te mueve de directorio
+# RUN: ejecuta comandos antes que la imagen se monte
+# WORKDIR: Significa donde estas trabajando actualmente, te mueve de directorio
 # COPY beryllium html
 WORKDIR /var/wwww
 # RUN: sirve para ejecutar comandos
 RUN yum install httpd -y
-# COPY : Copia un  archivo de tu maquina local a la iamgen
+# COPY : Copia un  archivo de tu maquina local a la imagen
 # COPY tuRuta RutaDestinoDImagen
 # Add: Sirve para  Url donde puedes colocar tu url y este la agregara descargando el archivo
 COPY beryllium /var/www/html
@@ -71,16 +83,23 @@ ENV contenido valorContenido
 VOLUME /var/www/html
 # USER: es para decir que usuario realiza la tarea por defecto es root
 USER root
-# CMD: es para ejecutar una tarea que se mantendra a la escucha y esta mantendra ejecutando a la imagen
+# CMD: es para ejecutar una tarea que se mantendrá a la escucha y esta mantendrá ejecutando a la imagen
 CMD apache
 ```
-## Eliminar una imagen con su volumenes incluidos
+## RUN vs CMD
+No confunda RUN con CMD. RUN en realidad ejecuta un comando y confirma el resultado; CMD no ejecuta nada en el momento de la compilación de la imagen, pero especifica el comando previsto para la imagen.
 
-`docker rm -fv thirsth_goodall`
+## DockerFile buenas practicas
 
-# Docker Container
+- Efímeros
+- Un servicio por contenedor
+- Build context utilizar dockerignore
+- pocas capas
+- utilizar labels
+
+## Docker Container
 - It es una instancia de una imagen
-- Tu puedes buscar una docker hub container repostire
+- Tu puedes buscar una docker hub container repositorio
 
 ```Dockerfile
 FROM ngix:latest
@@ -103,8 +122,8 @@ Este levanta los servicios
 
 `docker-compose up`
 
-Linkear los docker que depende de unos
-Docker crea un tunerl seguro entre lso contenedores que no requieren exponer ninugn puerto externamente del contenedor
+Link los docker que depende de unos
+Docker crea un túnel seguro entre lso contenedores que no requieren exponer ninugn puerto externamente del contenedor
 
 `docker run -d -p 5000:5000 --link [nombre del contenedor] dockerapp:0.1`
 
@@ -114,38 +133,40 @@ Para ver los logs
 docker exec -it [iddocker] bash
 more /etc/hosts
 `
-## Comando utiles de docker-compose
+## Comando útiles de docker-compose
 ```bash
 docker-compose up -d
 docker-compose ps
 docker-compose logs [name-container]
 ```
+## Eliminar una imagen con su volúmenes incluidos
 
-# Buenas practicas para el docker file
-- Efimeros 
-- Multi linea
-- no instalar paquetes innecesarios
-- labels
+`docker rm -fv thirsth_goodall`
 
-# RUN vs CMD
-No confunda RUN con CMD. RUN en realidad ejecuta un comando y confirma el resultado; CMD no ejecuta nada en el momento de la compilación de la imagen, pero especifica el comando previsto para la imagen.
 
-## Dangling images
-- <none> <none>
-cuando nos aparece esta etiquetas lo que seucede es q las imagenes son de solo lectura y lo que hace docker es crear una imagen y la otra imagen le coloca <none> donde el nombre y el tag son iguales 
-Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifica una tag
 ## Listar las images danling
 
 `docker images -f dangling=true`
 
-## Docker multi stage build
+
+## Dangling images
+- <none> <none>
+cuando nos aparece esta etiquetas lo que sucede es q las imágenes son de solo lectura y lo que hace docker es crear una imagen y la otra imagen le coloca <none> donde el nombre y el tag son iguales 
+Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifica una tag
+
 
 # Contenedores
-- Son una instancia de ejecuacion de una imagen
+- Son una instancia de Ejecución de una imagen
 - Son temporales
 - Capa de rw 
 - Podemos crear varios partiendo de una misma imagen
-## Renombar el contenedor
+
+# Listar contenedor
+
+`docker ps`
+`docker ps -a`
+
+## Renombrar el contenedor
 
 `docker rename oldName newName`
 
@@ -155,13 +176,13 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 
 `docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
 
-## Listar volume
+## Listar volúmenes disponibles
 
 `docker volume ls`
 
 `docker ps -a`
 
-## Inicar / Reniciar / Dentener Contendor
+## Iniciar / Reiniciar / Detener Contenedor
 
 ```
 docker stop [id | Nombre ]
@@ -169,7 +190,7 @@ docker start [id | Nombre ]
 docker restart [id | Nombre ]
 ```
 
-## Ingresar modo rrot
+## Ingresar modo ROT
 `-ti` significa interactivo
 
 `docker exec -ti -u root drupal bash`
@@ -180,11 +201,11 @@ Son las variables que se pasan al iniciar un contenedor del docker File
 
 `docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
 
-## Ver stats de un contendor
+## Ver stats de un Contenedor
 
 `docker stats [nameContainer | idContainer ]`
 
-## Limitar recursos conteneodr puede consumir
+## Limitar recursos Contenedor puede consumir
 
 `docker run -d -m "500mb | 5gb" --name myNameContainer nameImage`
 
@@ -242,37 +263,44 @@ Son las variables que se pasan al iniciar un contenedor del docker File
 
 `docker run --network host -d --name tst2 --ti centos`
 
-## Ver imagenes
+## Ver Imágenes
 
 `docker images | grep centos`
 
-## Eliminar Imagenes
+## Eliminar Imágenes
 
 `docker rmi centos:prueba1`
 
-## Sobreescribir el CMD de una imagen sin un DockerFile
+## Sobrescribir el CMD de una imagen sin un DockerFile
 
+`docker run -dti centos echo hello world`
 `docker un -d -p 8080:8080 centos python -m SimpleHTTPServer 8080`
 
-# Volumenes
-- Sirve para mantener data Persistente en nuestra maquina local.
-- Los volumenes permiten almacenar data persistente del contendor
-Existen 3 tipo de volumenes
-- Host archivo especificados en nuestra maquinba
-- Anonymus volumenes especificado aletoriamente por docker
-- Named Volumens volumenes adminsitrados por docker
+## Contenedor que se autodestruya
 
-## Eliminar una imagen con su volumenes incluidos
+`docker run --rm -ti --name centos centos bash`
+
+# Volúmenes
+- Sirve para mantener data Persistente en nuestra maquina local.
+- Los volúmenes permiten almacenar data persistente del contenedor
+
+Existen 3 tipo de volúmenes
+- Host archivo especificados en nuestra maquina
+- Anonymous volúmenes especificado de forma aleatoria por docker
+- Named Volúmenes volúmenes administrados por docker
+
+## Eliminar una imagen con su volúmenes incluidos
 
 `docker rm -fv thirsth_goodall`
 
-## Porq es importante los volumenes?
-Para mantener la persistencia de los datos que sean importnates en nuestro equipoo 
+## Porque es importante los volúmenes?
+Para mantener la persistencia de los datos que sean importantes en nuestro equipos 
 
 `docker run --name some-mysql -v /miDirectorioLocal/:/directorioContenedor -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
 
 `docker run --name some-mysql -v /miDirectorio/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
-## Volumenes de HOST
+
+## Volúmenes de HOST
 
 `docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=123456789" -v mydirectory/directory/:/var/lib/mysql/ `
 
@@ -282,20 +310,10 @@ Para mantener la persistencia de los datos que sean importnates en nuestro equip
 - cuando se elimina el Container se borra el volumen anonimo
 
 
-## Volumenes Nombrados
-- se nombre en los Docker files con VOLUME
+## Volúmenes Nombrados
+- se nombra  en los Docker files con VOLUME
 - utiliza la misma logica q los VOLUME anonimos
 
-
-
-## Docker Compose
-- Es una herramientas q nos ayuda a crear aplicaciones multicontendor
-- Podemos Definiar
-    - Contenedores
-    - Imangesn
-    - Volumunenes
-    - Redes
-    - ...
 ## Example VOLUMENES nombrados
 
 ```
@@ -324,7 +342,8 @@ docker exec -ti myNameContainer bash
 ## Dangling Volumen
 `docker v`
 ## Comparte Volumenes entre uno o mas contendores
-## Docker Compose
+
+# Docker Compose
 Es una herramientas que nos ayuda a crear herramientars multicontendores, donde podemos definir toda la configuraciones necesarias de estas
 ## Generar Container desde DockerCompose
 
