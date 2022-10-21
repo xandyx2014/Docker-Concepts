@@ -161,9 +161,10 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 - Capa de rw 
 - Podemos crear varios partiendo de una misma imagen
 
-# Listar contenedor
-
+## Listar contenedor
+muestra los contendor que estan corriendo y los que no
 `docker ps`
+
 `docker ps -a`
 
 ## Renombrar el contenedor
@@ -344,12 +345,12 @@ docker exec -ti myNameContainer bash
 ## Comparte Volumenes entre uno o mas contendores
 
 # Docker Compose
-Es una herramientas que nos ayuda a crear herramientars multicontendores, donde podemos definir toda la configuraciones necesarias de estas
+Es una herramientas que nos ayuda a crear herramientas multi contenedores, donde podemos definir toda la configuraciones necesarias de estas
 ## Generar Container desde DockerCompose
 
 `docker-compose up -d`
 
-## Las propiedaes del DockerCompose
+## Las propiedades del DockerCompose
 - version: 
 - services:
 - volumnes:
@@ -365,9 +366,9 @@ services:
 ```
 ## Para levantar el servicio de docker-compose.yml
 `docker-compose up -d`
-## Para deeter el servicio docker-compose
+## Para detener el servicio docker-compose
 `docker down`
-## Variales de entorno
+## Variables de entorno
 ```yml
 version: '3'
 services:
@@ -395,8 +396,8 @@ services:
             - "3306:3306"
         env_file: common.env
 ```
-## Volumenes en docker compose
-### Volumenees nombrados
+## Volúmenes en docker compose
+### Volúmenes nombrados
 ```yml
 version: '3'
 services:
@@ -410,7 +411,7 @@ services:
 volumen:
     vol2:
 ```
-### Volumenees host
+### Volúmenes host
 ```yml
 version: '3'
 services:
@@ -443,10 +444,10 @@ services:
 networks:
 	net-test:
 ```
-## Construye imagenes con docker-compose.yml
+## Construye imágenes con docker-compose.yml
 
 `docker-compose build`
-
+ si tiene un build: . busca un DockerFile por defecto en su ruta de archivo 
 ```yml
 version: '3'
 services:
@@ -460,7 +461,7 @@ services:
       - 'E:\proyects_docker\tutorial\project-4:/usr/share/nginx/html'
     image: nginx
 ```
-## Sobreescribiar el CMD de un contenedor con COmpose
+## Sobrescribir el CMD de un contenedor con COmpose
 ```yml
 version: '3'
 services:
