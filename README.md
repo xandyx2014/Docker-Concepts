@@ -161,6 +161,54 @@ Es una imagen sin referencia, cuando se genera una nueva imagen y no se especifi
 - Capa de rw 
 - Podemos crear varios partiendo de una misma imagen
 
+## Ver Información del contenedor
+
+Ver el contenedor que mas esta consumiendo
+
+`docker top [idName | NameContainer]`
+
+Ver Stats del contenedor
+
+`docker stats [IdName | NameContainer]`
+## Información y gestión del sistema de los contenedores
+
+`docker system info`
+
+Ver los docker y los Tamaño
+
+`docker system df`
+
+Eliminar todos los contendores network danling images danling build cache
+`docker system prune`
+
+## Mover archivos a los contendores 
+
+`docker cp miArchivoLocal.txt [NameContainer]:/tmp`
+
+
+## Ver características del contenedor
+
+`docker inspect [IdName | NameContainer]` 
+
+mandar el inspect a un fichero
+
+`docker inspect [IdName | NameContainer] > container.txt`
+
+## Ver logs del contendor
+
+`docker logs --tail 10 [IdContainer | NameContainer]`
+
+Ver de manera directa 
+`docker logs -f 10  [IdContainer | NameContainer]`
+## PARAR y ELIMINAR un contenedor al mismo tiempo
+
+`docker kill [IdContainer | NameContainer]`
+
+## Correr un Contenedor modo Background
+
+```bachs
+docker run -d nginx
+```
 ## Listar contenedor
 muestra los contendor que estan corriendo y los que no
 `docker ps`
@@ -173,7 +221,7 @@ muestra los contendor que estan corriendo y los que no
 
 ## Listar y mapear los puertos puertos
 
-- docker run -d -p [Puesto nuestra maquina]:[Puerto del contenedor] jenkins
+`docker run -d -p [Puesto nuestra maquina]:[Puerto del contenedor] jenkins`
 
 `docker run --name my-dbl -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql`
 
@@ -280,15 +328,37 @@ Son las variables que se pasan al iniciar un contenedor del docker File
 ## Contenedor que se autodestruya
 
 `docker run --rm -ti --name centos centos bash`
+# REDES
+Las redes de docker por defecto son bridge
+existen 3 tipos de redes
+- dridge
+- host
+- none
+## Listar redes
+
+`docker network ls`
+
+## Comprobar puertos de las Contenedores/Imagenes
+
+`docker port [nameContainer | IdContainer]`
+
+## Crear redes
+
+Los drivers  son (bridge, bridge)
+
+`docker network create red1`
+
+## Asociar contenedor a una red
+
 
 # Volúmenes
 - Sirve para mantener data Persistente en nuestra maquina local.
 - Los volúmenes permiten almacenar data persistente del contenedor
 
 Existen 3 tipo de volúmenes
-- Host archivo especificados en nuestra maquina
-- Anonymous volúmenes especificado de forma aleatoria por docker
-- Named Volúmenes volúmenes administrados por docker
+- [Host] archivo especificados en nuestra maquina
+- [Anonymous volúmenes] especificado de forma aleatoria por docker
+- [Named Volúmenes] volúmenes administrados por docker
 
 ## Eliminar una imagen con su volúmenes incluidos
 
@@ -306,7 +376,7 @@ Para mantener la persistencia de los datos que sean importantes en nuestro equip
 `docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=123456789" -v mydirectory/directory/:/var/lib/mysql/ `
 
 ## Volumnenes anonimos 
-- tienen nombres aletorias hash
+- tienen nombres aletorias normalmente nombrados con hash
 - se crea en un archivo  aletorio del lugar
 - cuando se elimina el Container se borra el volumen anonimo
 
@@ -343,6 +413,8 @@ docker exec -ti myNameContainer bash
 ## Dangling Volumen
 `docker v`
 ## Comparte Volumenes entre uno o mas contendores
+
+
 
 # Docker Compose
 Es una herramientas que nos ayuda a crear herramientas multi contenedores, donde podemos definir toda la configuraciones necesarias de estas
