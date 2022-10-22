@@ -348,7 +348,9 @@ Los drivers  son (bridge, bridge)
 
 `docker network create red1`
 
-## Asociar contenedor a una red
+## Inspeccionar una red
+
+`docker network inspect [NameRed]`
 
 
 # Volúmenes
@@ -359,6 +361,20 @@ Existen 3 tipo de volúmenes
 - [Host] archivo especificados en nuestra maquina
 - [Anonymous volúmenes] especificado de forma aleatoria por docker
 - [Named Volúmenes] volúmenes administrados por docker
+
+## Crear un Volumen
+
+`docker volume create [Name]`
+
+## Crear volumenes Temporales
+
+`docker run -d -i --name ubuntu18 --tmpfs /datos ubuntu`
+
+## Ver información volumen
+
+`docker volume ls`
+
+
 
 ## Eliminar una imagen con su volúmenes incluidos
 
