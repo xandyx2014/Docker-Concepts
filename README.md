@@ -358,10 +358,32 @@ Los drivers  son (bridge, bridge)
 - Los volúmenes permiten almacenar data persistente del contenedor
 
 Existen 3 tipo de volúmenes
-- [Host] archivo especificados en nuestra maquina
+- [Bind Amount] archivo especificados en nuestra maquina
 - [Anonymous volúmenes] especificado de forma aleatoria por docker
 - [Named Volúmenes] volúmenes administrados por docker
+## Bing Amount 
+Los bing amount han existido desde los primeros días de Docker. Los bing amount tienen una funcionalidad limitada en comparación con los volúmenes. Cuando se utiliza un montaje de enlace, un archivo o directorio en la máquina anfitriona se monta en un contenedor. El archivo o directorio es referenciado por su ruta absoluta en la máquina anfitriona. Por el contrario, cuando se utiliza un volumen, se crea un nuevo directorio dentro del directorio de almacenamiento de Docker en la máquina anfitriona, y Docker gestiona el contenido de ese directorio.
+No es necesario que el archivo o directorio ya exista en el host de Docker. Se crea bajo demanda si aún no existe. Los montajes Bind son muy eficaces, pero dependen de que el sistema de archivos de la máquina anfitriona tenga una estructura de directorios específica disponible. Si estás desarrollando nuevas aplicaciones Docker, considera usar volúmenes con nombre en su lugar. No puedes utilizar los comandos de la CLI de Docker para gestionar directamente los bing amount.
 
+- `--mount`: Consiste en múltiples pares clave-valor, separados por comas y cada uno de ellos formado por una tupla <clave>=<valor>. La sintaxis de --mount es más verbosa que -v o --volume, pero el orden de las claves no es significativo y el valor de la bandera es más fácil de entender.
+  - El tipo de montaje, que puede ser bind, volumen o tmpfs. Este tema trata sobre montajes bind, por lo que el tipo es siempre bind.
+  -  El `source`. En el caso de los montajes bind, se trata de la ruta al archivo o directorio en el host del demonio Docker. Puede especificarse como source o src.
+  -  El `destination` toma como valor la ruta donde se monta el archivo o directorio en el contenedor. Puede especificarse como destination, dst o target.
+  -  La opción `readonly`, si está presente, hace que el montaje bind se monte en el contenedor como de sólo lectura.
+    La opción bind-propagation, si está presente, cambia la propagación de bind. Puede ser una de las opciones rprivate, private, rshared, shared, rslave, slave.
+  -  La bandera `--mount` no soporta las opciones z o Z para modificar las etiquetas de selinux.
+
+### Configurar Bind propagation
+La `bind propagation` es por defecto rprivate tanto para los `bind propagation` como para los volúmenes. Sólo es configurable para los `bind propagation`, y sólo en máquinas anfitrionas Linux. La propagación de bind es un tema avanzado y muchos usuarios nunca necesitan configurarlo.
+
+La `bind propagation` se refiere a si los montajes creados dentro de un determinado bind-mount pueden o no propagarse a las réplicas de ese montaje. Considere un punto de montaje `/mnt`, que también está montado en `/tmp`. La configuración de propagación controla si un montaje en `/tmp/a` también estará disponible en `/mnt/a` Cada configuración de propagación tiene un contrapunto recursivo. En el caso de la recursión, considere que `/tmp/a` también está montado como `/foo`. La configuración de propagación controla si `/mnt/a` y/o `/tmp/a` existirían.
+
+- shared: Los submontajes del montaje original se exponen a los montajes de réplica, y los submontajes de los montajes de réplica también se propagan al montaje original.
+- slave: similar a un montaje compartido, pero sólo en una dirección. Si el montaje original expone un submontaje, el montaje de réplica puede verlo. Sin embargo, si el montaje de réplica expone un submontaje, el montaje original no puede verlo.
+- private: 	El montaje es privado. Los submontajes dentro de él no están expuestos a los montajes de réplica, y los submontajes de los montajes de réplica no están expuestos al montaje original
+- rshared: Lo mismo que compartido, pero la propagación también se extiende a y desde puntos de montaje anidados dentro de cualquiera de los puntos de montaje originales o réplicas.
+- rslave: Lo mismo que esclavo, pero la propagación también se extiende a y desde puntos de montaje anidados dentro de cualquiera de los puntos de montaje originales o de réplica.
+- rprivate: 	Por defecto. Lo mismo que privado, lo que significa que ningún punto de montaje en cualquier parte de los puntos de montaje originales o de réplica se propaga en cualquier dirección.
 ## Crear un Volumen
 
 `docker volume create [Name]`
